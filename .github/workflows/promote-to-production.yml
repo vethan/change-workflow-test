@@ -29,8 +29,30 @@ jobs:
         with:
           version: latest
           args: latest
+      - name: Get the latest version
+        id: diff
+        uses: miniscruff/changie-action@v2
+        with:
+          version: latest
+          args: diff 1
       - uses: stefanzweifel/git-auto-commit-action@v6
         id: auto-commit-action #mandatory for the output to show up in ${{ steps }}
         with:
           commit_message: Bump Version to ${{ steps.latest.outputs.output }}
           tagging_message: '${{ steps.latest.outputs.output }}'
+      - uses: emiliopedrollo/auto-merge@v1.2.0
+        with:
+          github_token: ${{ github.token }}
+          target_branch: 'production'
+      - name: Send Message to Slack
+        uses: slackapi/slack-github-action@v2.1.0
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            text: "*New Test REPO Release*: ${{ steps.latest.outputs.output }}"
+            blocks:
+              - type: "section"
+                text:
+                  type: "mrkdwn"
+                  text: "${{ steps.diff.outputs.output }}"

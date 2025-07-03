@@ -44,6 +44,11 @@ jobs:
         with:
           github_token: ${{ github.token }}
           target_branch: 'production'
+      - name: Slack Markdown Converter
+        uses: LoveToKnow/slackify-markdown-action@v1.1.1
+        id: slackconvert
+        with:
+          text: ${{ steps.diff.outputs.output }}
       - name: Send Message to Slack
         uses: slackapi/slack-github-action@v2.1.0
         with:
@@ -52,7 +57,11 @@ jobs:
           payload: |
             text: "*New Test REPO Release*: ${{ steps.latest.outputs.output }}"
             blocks:
+              - type: "header"
+                text:
+                  type: "mrkdwn"
+                  text: "*New Test REPO Release*: ${{ steps.latest.outputs.output }}"
               - type: "section"
                 text:
                   type: "mrkdwn"
-                  text: "${{ steps.diff.outputs.output }}"
+                  text: "${{ steps.slackconvert.outputs.text }}"

@@ -7,12 +7,17 @@ permissions:
   repository-projects: write
 on: 
   workflow_dispatch:
-    branches: [main]
+    branches: [production]
 jobs:
-  sync-branch:
+  commit-new-version:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+      - uses: emiliopedrollo/auto-merge@v1.2.0
+        with:
+          github_token: ${{ github.token }}
+          source_ref: 'main'
+          target_branch: 'production'
       - name: Batch changes
         uses: miniscruff/changie-action@v2
         with:
@@ -42,7 +47,8 @@ jobs:
       - uses: emiliopedrollo/auto-merge@v1.2.0
         with:
           github_token: ${{ github.token }}
-          target_branch: 'production'
+          source_ref: 'production'
+          target_branch: 'main'
       - name: Slack Markdown Converter
         uses: LoveToKnow/slackify-markdown-action@v1.1.1
         id: slackconvert

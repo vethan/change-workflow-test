@@ -1,0 +1,35 @@
+name: Promote Staging to Production
+on: 
+  workflow_dispatch:
+    branches: [main]
+jobs:
+  sync-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+            ssh-key: "${{secrets.DEPLOY_KEY}}"
+
+        - name: Batch changes
+          uses: miniscruff/changie-action@v2
+          with:
+            version: latest
+            args: batch auto
+        - name: Merge changes
+          uses: miniscruff/changie-action@v2
+          with:
+            version: latest
+            args: merge
+        - name: Get the latest version
+          id: latest
+          uses: miniscruff/changie-action@v2
+          with:
+            version: latest
+            args: latest
+        - name: Merge to production
+          uses: devmasx/merge-branch@master
+          with:
+            type: now
+            target_branch: production
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            message: Release ${{ steps.latest.outputs.output }}

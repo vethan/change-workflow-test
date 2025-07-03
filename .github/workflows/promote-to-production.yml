@@ -1,7 +1,7 @@
 name: Promote Staging to Production
 permissions:
   id-token: write
-  contents: true
+  contents: write
   pull-requests: write
   issues: write
   repository-projects: write

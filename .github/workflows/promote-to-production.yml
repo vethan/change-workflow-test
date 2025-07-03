@@ -1,4 +1,10 @@
 name: Promote Staging to Production
+permissions:
+  id-token: write
+  contents: true
+  pull-requests: write
+  issues: write
+  repository-projects: write
 on: 
   workflow_dispatch:
     branches: [main]
@@ -7,8 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-        with:
-            ssh-key: "${{secrets.DEPLOY_KEY}}"
       - name: Batch changes
         uses: miniscruff/changie-action@v2
         with:
@@ -25,10 +29,8 @@ jobs:
         with:
           version: latest
           args: latest
-      - name: Merge to production
-        uses: devmasx/merge-branch@master
+      - uses: stefanzweifel/git-auto-commit-action@v6
+        id: auto-commit-action #mandatory for the output to show up in ${{ steps }}
         with:
-          type: now
-          target_branch: production
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          message: Release ${{ steps.latest.outputs.output }}
+          commit_message: Bump Version to ${{ steps.latest.outputs.output }}
+          tagging_message: '${{ steps.latest.outputs.output }}'

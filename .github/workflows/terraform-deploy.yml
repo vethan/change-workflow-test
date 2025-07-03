@@ -1,0 +1,24 @@
+name: Terraform and Deployment
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+  issues: write
+  repository-projects: write
+on:
+  push:
+    branches: [ "staging","production" ]
+  pull_request:
+    branches: [ "staging","production" ]
+  workflow_run:
+    workflows: [Promote Staging to Production]
+    types: [completed]
+jobs:
+  notify-slack:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Message to Slack
+        uses: slackapi/slack-github-action@v2.1.0
+        with:
+          slack-message: "Event '${{ github.event_name }}' occurred in '${{ github.repository }}'."
+          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}

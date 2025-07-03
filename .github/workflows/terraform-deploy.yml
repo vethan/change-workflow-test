@@ -1,7 +1,7 @@
 name: Terraform and Deployment
 permissions:
   id-token: write
-  contents: read
+  contents: write
   pull-requests: write
   issues: write
   repository-projects: write

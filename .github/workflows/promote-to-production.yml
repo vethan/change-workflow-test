@@ -7,12 +7,17 @@ permissions:
   repository-projects: write
 on: 
   workflow_dispatch:
-    branches: [main]
+    branches: [production]
 jobs:
-  sync-branch:
+  commit-new-version:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+      - uses: emiliopedrollo/auto-merge@v1.2.0
+        with:
+          github_token: ${{ github.token }}
+          source_ref: 'main'
+          target_branch: 'production'
       - name: Batch changes
         uses: miniscruff/changie-action@v2
         with:
@@ -39,11 +44,11 @@ jobs:
         id: auto-commit-action #mandatory for the output to show up in ${{ steps }}
         with:
           commit_message: Bump Version to ${{ steps.latest.outputs.output }}
-          tagging_message: '${{ steps.latest.outputs.output }}'
       - uses: emiliopedrollo/auto-merge@v1.2.0
         with:
           github_token: ${{ github.token }}
-          target_branch: 'production'
+          source_ref: 'production'
+          target_branch: 'main'
       - name: Slack Markdown Converter
         uses: LoveToKnow/slackify-markdown-action@v1.1.1
         id: slackconvert
@@ -55,12 +60,12 @@ jobs:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
           payload: |
-            text: "*New Test REPO Release*: ${{ steps.latest.outputs.output }}"
+            text: "New Test REPO Release: ${{ steps.latest.outputs.output }}"
             blocks:
               - type: "header"
                 text:
-                  type: "mrkdwn"
-                  text: "*New Test REPO Release*: ${{ steps.latest.outputs.output }}"
+                  type: "plain_text"
+                  text: "New Test REPO Release: ${{ steps.latest.outputs.output }}"
               - type: "section"
                 text:
                   type: "mrkdwn"

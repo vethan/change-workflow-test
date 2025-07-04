@@ -11,10 +11,6 @@ on:
   pull_request:
     branches: [ "staging","production" ]
   workflow_call:
-    outputs:
-      status:
-        description: "Just OK"
-        value: OK
 jobs:
   notify-slack:
     runs-on: ubuntu-latest

@@ -81,3 +81,4 @@ jobs:
   deploy:
     needs: commit-new-version
     uses: ./.github/workflows/terraform-deploy.yml
+    secrets: inherit

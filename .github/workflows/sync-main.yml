@@ -1,0 +1,27 @@
+name: 'Fast Forward Staging to Prod'
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+  issues: write
+  repository-projects: write
+on:
+  workflow_run:
+    workflows: ["Promote Staging to Production"]
+    types: [completed]
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Merge Fast Forward
+        uses: MaximeHeckel/github-action-merge-fast-forward@v1.1.0
+        with:
+          # Branch to merge
+          branchtomerge: origin/production
+          # Branch that will be updated
+          branch: main
+        env:
+          GITHUB_TOKEN: ${{ github.token }}

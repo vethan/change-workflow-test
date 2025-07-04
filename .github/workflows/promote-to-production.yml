@@ -48,15 +48,6 @@ jobs:
         id: auto-commit-action #mandatory for the output to show up in ${{ steps }}
         with:
           commit_message: Bump Version to ${{ steps.latest.outputs.output }}
-      - name: Merge Fast Forward
-        uses: MaximeHeckel/github-action-merge-fast-forward@v1.1.0
-        with:
-          # Branch to merge
-          branchtomerge: origin/production
-          # Branch that will be updated
-          branch: origin/main
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
       - name: Slack Markdown Converter
         uses: LoveToKnow/slackify-markdown-action@v1.1.1
         id: slackconvert

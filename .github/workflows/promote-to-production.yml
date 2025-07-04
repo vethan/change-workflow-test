@@ -71,3 +71,5 @@ jobs:
                 text:
                   type: "mrkdwn"
                   text: "${{ steps.slackconvert.outputs.text }}"
+  deploy:
+    uses: ./.github/workflows/terraform-deploy.yaml

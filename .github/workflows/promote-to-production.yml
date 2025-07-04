@@ -17,6 +17,7 @@ jobs:
           github_token: ${{ github.token }}
           source_ref: 'main'
           target_branch: 'production'
+          force_fast_forward: true
       - uses: actions/checkout@master
       - name: Batch changes
         uses: miniscruff/changie-action@v2
@@ -49,6 +50,7 @@ jobs:
           github_token: ${{ github.token }}
           source_ref: 'production'
           target_branch: 'main'
+          force_fast_forward: true
       - name: Slack Markdown Converter
         uses: LoveToKnow/slackify-markdown-action@v1.1.1
         id: slackconvert

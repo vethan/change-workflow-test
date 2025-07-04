@@ -72,4 +72,5 @@ jobs:
                   type: "mrkdwn"
                   text: "${{ steps.slackconvert.outputs.text }}"
   deploy:
-    uses: ./.github/workflows/terraform-deploy.yaml
+    needs: commit-new-version
+    uses: ./.github/workflows/terraform-deploy.yml

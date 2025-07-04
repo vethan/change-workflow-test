@@ -12,6 +12,7 @@ jobs:
   commit-new-version:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@master
       - name: Merge Fast Forward
         uses: MaximeHeckel/github-action-merge-fast-forward@v1.1.0
         with:
@@ -21,7 +22,6 @@ jobs:
           branch: production
         env:
           GITHUB_TOKEN: ${{ github.token }}
-      - uses: actions/checkout@master
       - name: Batch changes
         uses: miniscruff/changie-action@v2
         with:

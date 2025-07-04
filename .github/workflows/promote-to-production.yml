@@ -12,12 +12,15 @@ jobs:
   commit-new-version:
     runs-on: ubuntu-latest
     steps:
-      - uses: emiliopedrollo/auto-merge@v1.2.0
+      - name: Merge Fast Forward
+        uses: MaximeHeckel/github-action-merge-fast-forward@v1.1.0
         with:
-          github_token: ${{ github.token }}
-          source_ref: 'main'
-          target_branch: 'production'
-          force_fast_forward: true
+          # Branch to merge
+          branchtomerge: main
+          # Branch that will be updated
+          branch: production
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
       - uses: actions/checkout@master
       - name: Batch changes
         uses: miniscruff/changie-action@v2
@@ -45,12 +48,15 @@ jobs:
         id: auto-commit-action #mandatory for the output to show up in ${{ steps }}
         with:
           commit_message: Bump Version to ${{ steps.latest.outputs.output }}
-      - uses: emiliopedrollo/auto-merge@v1.2.0
+      - name: Merge Fast Forward
+        uses: MaximeHeckel/github-action-merge-fast-forward@v1.1.0
         with:
-          github_token: ${{ github.token }}
-          source_ref: 'production'
-          target_branch: 'main'
-          force_fast_forward: true
+          # Branch to merge
+          branchtomerge: production
+          # Branch that will be updated
+          branch: main
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
       - name: Slack Markdown Converter
         uses: LoveToKnow/slackify-markdown-action@v1.1.1
         id: slackconvert

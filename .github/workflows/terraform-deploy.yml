@@ -10,9 +10,11 @@ on:
     branches: [ "staging","production" ]
   pull_request:
     branches: [ "staging","production" ]
-  workflow_run:
-    workflows: [Promote Staging to Production]
-    types: [completed]
+  workflow_call:
+    outputs:
+      status:
+        description: "Just OK"
+        value: OK
 jobs:
   notify-slack:
     runs-on: ubuntu-latest

@@ -1,7 +1,7 @@
 name: 'Fast Forward Staging to Prod'
 permissions:
   id-token: write
-  contents: read
+  contents: write
   pull-requests: write
   issues: write
   repository-projects: write
